@@ -4,6 +4,7 @@ branches:
   - master
 install:
 - pip install pelican ghp-import
+- pelican-themes --install ./themes/pelican-simplegrey
 script:
 - make publish github
 env:
