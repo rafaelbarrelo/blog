@@ -3,7 +3,7 @@ Date: 2015-03-27 21:18
 Category: Python
 Tags: pelican, ghp-import
 Slug: publicando-post
-Authors: Rafael Barrelo
+Authors: rafaelbarrelo
 Summary: publicando um post com ghp-import
 
 Antes de publicar, é preciso ter instalado o **[ghp-import]**.

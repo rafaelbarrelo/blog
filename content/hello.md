@@ -1,10 +1,13 @@
 Title: Hello World
-Date: 2015-03-26 19:47
-Category: Python
-Tags: pelican, markdown
+Date: 2013-12-20
+Category: sem.categoria
+Tags: hello, world
 Slug: hello-world
-Authors: Rafael Barrelo
+Authors: rafaelbarrelo
 Summary: hello world pelican
 
-Hello World!
-Primeiro post do blog com *pelican*
+Como todo programador que aprende uma nova linguagem com o famoso “Hello World”, aqui não poderia ser diferente…
+
+Vou usar esse blog pra “guardar” algumas dicas de desenvolvimento. Não pretendo ter tutorias complexos nem frequência fixa definida. Vou postar conforme achar necessário, sem compromisso algum.
+
+> Esse post foi publicado originalmente no meu antigo blog em WordPress
