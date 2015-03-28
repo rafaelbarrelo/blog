@@ -7,6 +7,7 @@ SITENAME = u'rafaelbarrelo.blog'
 SITEURL = u''
 
 PATH = 'content'
+THEME = 'pelican-simplegrey'
 
 TIMEZONE = 'America/Sao_Paulo'
 
