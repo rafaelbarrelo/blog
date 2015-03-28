@@ -3,7 +3,7 @@ branches:
   only:
   - master
 install:
-- pip install pelican ghp-import
+- pip install -r requirements.txt
 - pelican-themes --install themes/pelican-simplegrey --verbose
 script:
 - make publish github
