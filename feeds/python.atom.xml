@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>rafaelbarrelo.blog</title><link href="http://rafael.barrelo.com.br/blog/" rel="alternate"></link><link href="http://rafael.barrelo.com.br/blog/feeds/python.atom.xml" rel="self"></link><id>http://rafael.barrelo.com.br/blog/</id><updated>2015-03-27T21:18:00-03:00</updated><entry><title>Publicando um Post com ghp-import</title><link href="http://rafael.barrelo.com.br/blog/publicando-post.html" rel="alternate"></link><updated>2015-03-27T21:18:00-03:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2015-03-27:blog/publicando-post.html</id><summary type="html">&lt;p&gt;Antes de publicar, é preciso ter instalado o &lt;strong&gt;&lt;a href="https://github.com/davisp/ghp-import"&gt;ghp-import&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;pip install ghp-import
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Em seguida, basta executar os comandos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;//Gera as páginas na pasta output com as configurações de publishconf.py
+&lt;span class="nv"&gt;$ &lt;/span&gt;pelican content -o output -s publishconf.py
+
+//Gera o branch gh-pages com o contúdo da pasta output
+&lt;span class="nv"&gt;$ &lt;/span&gt;ghp-import output
+
+//Manda para o github
+&lt;span class="nv"&gt;$ &lt;/span&gt;git push origin gh-pages
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Para simplificar, podemos rodar tudo em um único comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;pelican content -o output -s publishconf.py &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; ghp-import output &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; git push origin gh-pages
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Pronto!
+O site estará publicado no GitHub =)&lt;/p&gt;</summary><category term="pelican"></category><category term="ghp-import"></category></entry></feed>

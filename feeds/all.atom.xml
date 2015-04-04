@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>rafaelbarrelo.blog</title><link href="http://rafael.barrelo.com.br/blog/" rel="alternate"></link><link href="http://rafael.barrelo.com.br/blog/feeds/all.atom.xml" rel="self"></link><id>http://rafael.barrelo.com.br/blog/</id><updated>2015-03-28T00:56:00-03:00</updated><entry><title>Deploy com Travis-CI</title><link href="http://rafael.barrelo.com.br/blog/deploy-com-travis.html" rel="alternate"></link><updated>2015-03-28T00:56:00-03:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2015-03-28:blog/deploy-com-travis.html</id><summary type="html">&lt;p&gt;Esse é um post de teste apenas para ver se o deploy com o Travis-CI funciona!&lt;/p&gt;</summary><category term="devops"></category><category term="travis"></category><category term="ci"></category><category term="deploy"></category></entry><entry><title>Publicando um Post com ghp-import</title><link href="http://rafael.barrelo.com.br/blog/publicando-post.html" rel="alternate"></link><updated>2015-03-27T21:18:00-03:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2015-03-27:blog/publicando-post.html</id><summary type="html">&lt;p&gt;Antes de publicar, é preciso ter instalado o &lt;strong&gt;&lt;a href="https://github.com/davisp/ghp-import"&gt;ghp-import&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;pip install ghp-import
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Em seguida, basta executar os comandos:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;//Gera as páginas na pasta output com as configurações de publishconf.py
+&lt;span class="nv"&gt;$ &lt;/span&gt;pelican content -o output -s publishconf.py
+
+//Gera o branch gh-pages com o contúdo da pasta output
+&lt;span class="nv"&gt;$ &lt;/span&gt;ghp-import output
+
+//Manda para o github
+&lt;span class="nv"&gt;$ &lt;/span&gt;git push origin gh-pages
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Para simplificar, podemos rodar tudo em um único comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;pelican content -o output -s publishconf.py &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; ghp-import output &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; git push origin gh-pages
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Pronto!
+O site estará publicado no GitHub =)&lt;/p&gt;</summary><category term="pelican"></category><category term="ghp-import"></category></entry><entry><title>Automatizando conexão com VPN no MAC OSX</title><link href="http://rafael.barrelo.com.br/blog/vpn-mac-osx.html" rel="alternate"></link><updated>2014-06-14T00:00:00-03:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-06-14:blog/vpn-mac-osx.html</id><summary type="html">&lt;p&gt;Primeiro, é preciso configurar a VPN no Mac pelo painel de configurações (não vou entrar nesse detalhe aqui, mas é bem tranquilo…). Para o exemplo, vamos supor que o nome da VPN criada é RBARRELO, já configurada com usuario e senha e sem marcar a opção “Send all traffic over VPN connection”, pois vamos criar uma rota para isso.&lt;/p&gt;
+&lt;p&gt;Abra seu editor de texto preferido e coloque o seguinte código:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/osascript&lt;/span&gt;
+
+tell application &lt;span class="s2"&gt;&amp;quot;System Events&amp;quot;&lt;/span&gt;
+    tell current location of network preferences
+        &lt;span class="nb"&gt;set &lt;/span&gt;VPNservice to service &lt;span class="s2"&gt;&amp;quot;RBARRELO&amp;quot;&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; exists VPNservice &lt;span class="k"&gt;then&lt;/span&gt;
+            connect VPNservice
+        end &lt;span class="k"&gt;if&lt;/span&gt;
+        repeat &lt;span class="k"&gt;until&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;connected of current configuration of VPNservice&lt;span class="o"&gt;)&lt;/span&gt;
+            delay 1
+            &lt;span class="s2"&gt;&amp;quot;Aguardando conexão com rede RBARRELO...&amp;quot;&lt;/span&gt;
+        end repeat
+
+        &lt;span class="s2"&gt;&amp;quot;Estamos conectado =)&amp;quot;&lt;/span&gt;
+    end tell
+end tell
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Salve o arquivo com o nome &lt;strong&gt;vpn_connect_script&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Em seguida, crie outro arquivo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/osascript&lt;/span&gt;
+
+tell application &lt;span class="s2"&gt;&amp;quot;System Events&amp;quot;&lt;/span&gt;
+ tell current location of network preferences
+  &lt;span class="nb"&gt;set &lt;/span&gt;VPNservice to service &lt;span class="s2"&gt;&amp;quot;RBARRELO&amp;quot;&lt;/span&gt;
+  &lt;span class="nb"&gt;set &lt;/span&gt;isConnected to connected of current configuration of VPNservice
+  &lt;span class="k"&gt;if&lt;/span&gt; isConnected &lt;span class="k"&gt;then&lt;/span&gt; disconnect VPNservice
+ end tell
+end tell
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Salve-o com o nome &lt;strong&gt;vpn_disconnect_script&lt;/strong&gt; no mesmo diretório do primerio.&lt;/p&gt;
+&lt;p&gt;Agora, abra o terminal e execute o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sudo chmod a+x vpn_connect_script &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo chmod a+x vpn_disconnect_script
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Isso irá dar permissão de execução para os scripts.&lt;/p&gt;
+&lt;p&gt;Pronto, agora se executar &lt;em&gt;.vpn_connect_script&lt;/em&gt;, você irá se conectar à VPN e &lt;em&gt;.vpn_disconnect_script&lt;/em&gt; irá te desconectar.&lt;/p&gt;
+&lt;p&gt;Ok, mas para isso funcionar, você precisaria estar no diretório dos scripts… Vamos melhorar isso?&lt;/p&gt;
+&lt;p&gt;Pelo terminal, entre na raiz do seu usuário com o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; ~/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Veja se existe o arquivo .profile com o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;ls -la
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Se existir, basta abri-lo com o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;open -e .profile
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Caso não exista, abra seu editor preferido e salve um arquivo com o nome .profile (sim, tem um ponto na frente!) no seu diretório raiz. Ou rode o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;touch .profile &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; open -e .profile
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Para criar e abrir o arquivo.&lt;/p&gt;
+&lt;p&gt;Coloque no arquivo o seguinte texto:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;alias vpn_connect=&amp;#39;~/{caminho_do_script}/vpn_connect_script &amp;amp;&amp;amp; sudo route add {IP} {Gateway} {Mask} &amp;amp;&amp;amp; ping -a -c 5 {IP}&amp;#39;
+alias vpn_disconnect=&amp;#39;~/{caminho_do_script}/vpn_disconnect_script&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Troque &lt;em&gt;{caminho_do_script}&lt;/em&gt; pelo diretório onde salvou os scripts, &lt;em&gt;{IP}&lt;/em&gt;, &lt;em&gt;{Gateway}&lt;/em&gt; e &lt;em&gt;{Mask}&lt;/em&gt; pelos dados referente a rota que deseja adicionar.&lt;/p&gt;
+&lt;p&gt;Salve o arquivo e feche o terminal.&lt;/p&gt;
+&lt;p&gt;Abra o terminal novamente e agora basta digitar &lt;strong&gt;vpn_connect&lt;/strong&gt; para conectar e &lt;strong&gt;vpn_disconnect&lt;/strong&gt; para desconectar.&lt;/p&gt;
+&lt;p&gt;Legal, não?!&lt;/p&gt;
+&lt;p&gt;Agradecimentos especiais ao &lt;a href="https://plus.google.com/+EduardoMazolini"&gt;Mazola&lt;/a&gt; do blog http://blog.mazolini.com.br/ pela ajuda nas configurações! =)&lt;/p&gt;
+&lt;p&gt;Abraços&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="automatizar"></category><category term="bash"></category><category term="conexão"></category><category term="dica"></category><category term="mac"></category><category term="osx"></category><category term="vpn"></category></entry><entry><title>Eclipse error: HttpServlet was not found</title><link href="http://rafael.barrelo.com.br/blog/httpservlet-was-not-found.html" rel="alternate"></link><updated>2014-05-01T00:00:00-03:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-05-01:blog/httpservlet-was-not-found.html</id><summary type="html">&lt;p&gt;Criei um projeto Maven no Eclipse e logo de cara recebi o erro no JSP:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The superclass “javax.servlet.http.HttpServlet” was not found on the Java Build Path&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Em uma busca rápida no Google, achei a solução no StackOverflow:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Click com o botão direito no projeto&lt;/li&gt;
+&lt;li&gt;Selecione: Build Path &amp;gt; Configure Build Path..&lt;/li&gt;
+&lt;li&gt;Selecione a aba Libraries&lt;/li&gt;
+&lt;li&gt;Click em Add Library.. &amp;gt; Server Runtime &amp;gt; Apache Tomcat &amp;gt; Finish.&lt;/li&gt;
+&lt;li&gt;Click em OK e pronto!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;No meu caso, esses passos resolveram a questão da dependência que faltava. Mas caso não resolva, existem mais 2 opções que podem ser encontrada aqui: http://stackoverflow.com/questions/22756153/httpservlet-was-not-found&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="build path"></category><category term="eclipse"></category><category term="http"></category><category term="java"></category><category term="jsp"></category><category term="maven"></category><category term="servlet"></category><category term="tomcat"></category></entry><entry><title>Criar link do Android SDK (Eclipse – Android Studio)</title><link href="http://rafael.barrelo.com.br/blog/link-simbolico-android.html" rel="alternate"></link><updated>2014-02-11T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-02-11:blog/link-simbolico-android.html</id><summary type="html">&lt;p&gt;Crie um link simbólico entre o diretório do SDK do Android do Eclipse e o diretório do Android Studio.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /Applications/Android Studio.app/
+&lt;span class="nv"&gt;$ &lt;/span&gt;ln -s /Users/&lt;span class="o"&gt;{&lt;/span&gt;usuario&lt;span class="o"&gt;}&lt;/span&gt;/Dev/Android/SDK sdk
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Simples assim =)&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="android"></category><category term="eclipse"></category><category term="link"></category><category term="mac"></category><category term="osx"></category><category term="eclipse"></category></entry><entry><title>Exibir/ocultar arquivos ocultos no Mac (OSX)</title><link href="http://rafael.barrelo.com.br/blog/exibir-ocultar-osx.html" rel="alternate"></link><updated>2014-02-09T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-02-09:blog/exibir-ocultar-osx.html</id><summary type="html">&lt;p&gt;No terminal use os seguintes comandos:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Exibir:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;defaults write com.apple.finder AppleShowAllFiles -bool &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;KillAll Finder
+ &lt;span class="sb"&gt;```&lt;/span&gt;
+* Ocultar:
+&lt;span class="sb"&gt;```&lt;/span&gt;sh
+&lt;span class="nv"&gt;$ &lt;/span&gt;defaults write com.apple.finder AppleShowAllFiles -bool &lt;span class="nb"&gt;false&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;KillAll Finder
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Simples!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="finder"></category><category term="mac"></category><category term="dica"></category><category term="osx"></category></entry><entry><title>Como abrir mais de uma instância do Eclipse (OSX) ?</title><link href="http://rafael.barrelo.com.br/blog/eclipse-multiplas-instancias.html" rel="alternate"></link><updated>2014-02-05T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-02-05:blog/eclipse-multiplas-instancias.html</id><summary type="html">&lt;p&gt;Quando eu preciso trabalhar com mais de um workspace no Eclipse, é interessante conseguir abrir mais de uma instância dele. No Mac OSX é bem fácil…&lt;/p&gt;
+&lt;p&gt;Basta fazer o seguinte…&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Click no menu Help &amp;gt; Eclipse Marketplace&lt;/li&gt;
+&lt;li&gt;Pesquise por “OS X Eclipse laucher utility”&lt;/li&gt;
+&lt;li&gt;Instale o plugin&lt;/li&gt;
+&lt;li&gt;Reinicie o Eclipse&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Pronto… agora basta ir em &lt;strong&gt;File &amp;gt; Open Workspace&lt;/strong&gt; para poder abrir mais de uma instância! =)&lt;/p&gt;
+&lt;p&gt;E no &lt;strong&gt;“ALT+TAB”&lt;/strong&gt; ele mostra um label vermelho com o nome do Workspace.&lt;/p&gt;
+&lt;p&gt;Eu vi aqui: http://ananthchellathurai.blogspot.com.br/2013/08/how-to-open-multiple-eclipse-on-mac.html&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="eclipse"></category><category term="java"></category><category term="osx"></category><category term="mac"></category><category term="dica"></category><category term="plugin"></category></entry><entry><title>Erro ao fazer deploy no Google App Engine</title><link href="http://rafael.barrelo.com.br/blog/erro-deploy-appengine.html" rel="alternate"></link><updated>2014-01-21T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-01-21:blog/erro-deploy-appengine.html</id><summary type="html">&lt;p&gt;Hoje estava tentando publicar um atualização serviço do aplicativo Mídia Palestrina, mas tive alguns problemas de comunicação com o Google App Engine. Depois de tanto insistir, consegui iniciar o deploy… Porém, chegou em 86% e travou. Fui forçado a parar e recomeçar, tendo que dar um force close no Eclipse.&lt;/p&gt;
+&lt;p&gt;Quando tentei novamente o deploy, recebi o erro:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Unable to update app: Error posting to URL:
+https://appengine.google.com/api/appversion/create?app_id=appname&amp;amp;version=1&amp;amp;
+409 Conflict
+Another transaction by user userid is already in progress for app: s~appname, version: 1.
+That user can undo the transaction with “appcfg rollback”.
+See the deployment console for more details
+Unable to update app: Error posting to URL:
+https://appengine.google.com/api/appversion/create?app_id=appname&amp;amp;version=1&amp;amp;
+409 Conflict
+Another transaction by user userid is already in progress for app: s~appname, version: 1.
+That user can undo the transaction with “appcfg rollback”.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;A mensagem me pareceu bem clara, como forcei o stop, a transação ficou aberta e precisava fecha-la antes de realizar o novo deploy.&lt;/p&gt;
+&lt;p&gt;Pesquisando um pouco na net, achei o seguinte tutorial que funcionou perfeitamente pra mim:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Abra o console e entre no diretório BIN do App Engine SDK, no meu caso:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;/Applications/Eclipse/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.8.8/appengine-java-sdk-1.8.8/bin
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Rode o comando para torar o appcfg.sh em 'executável':&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;sudo chmod a+x appcfg.sh
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Identifique o diretório war do seu projeto. No meu caso:
+````
+/Users/rafaelbarrelo/Dev/Eclipse/workspace/MidiaPalestrinaServerV2/war/&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;* Rode o comando de roolback
+```sh
+$ ./appcfg.sh rollback /Users/rafaelbarrelo/Dev/Eclipse/workspace/MidiaPalestrinaServerV2/war/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Ele irá iniciar o processo… Coloque o e-mail e senha!
+Fim, processo concluído e deploy “liberado”!
+Obs: No meu caso, como uso Google Authenticator, tive que criar uma senha de aplicativo quando o script solicitou a senha do e-mail. Apenas criei a senha e depois de finalizado excluí-la.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Referência:&lt;/em&gt;
+http://stackoverflow.com/questions/11675632/how-do-i-execute-the-command-appcfg-rollback&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="appengine"></category><category term="eclipse"></category><category term="google"></category><category term="java"></category></entry><entry><title>Como identificar LOCK e UNLOCK do Windows em .NET? E o Screen Saver?</title><link href="http://rafael.barrelo.com.br/blog/lock-unlock-net.html" rel="alternate"></link><updated>2014-01-15T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-01-15:blog/lock-unlock-net.html</id><summary type="html">&lt;p&gt;Para identificar os comandos de LOCK e UNLOCK do Windows em .NET basta implementar o seguinte:&lt;/p&gt;
+&lt;p&gt;```c#
+//Habilita controle do bloqueio de tela
+Microsoft.Win32.SystemEvents.SessionSwitch +=
+  new Microsoft.Win32.SessionSwitchEventHandler(SystemEvents_SessionSwitch);&lt;/p&gt;
+&lt;p&gt;//Trata os eventos
+void SystemEvents_SessionSwitch(object sender, Microsoft.Win32.SessionSwitchEventArgs e)
+{
+    if (e.Reason == SessionSwitchReason.SessionLock){
+        //Bloqueou estação
+    }
+    else if (e.Reason == SessionSwitchReason.SessionUnlock){
+        //Desbloqueou estação
+    }
+}&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;Mas… Se entra o ScreenSaver, ele não bloqueia a tela imediatamente. O comando de bloquei só ocorre quando o ScreenSaver fecha. Assim, podemos “saber” se o ScreenSaver está ativado e tomar uma ação:
+
+```c#
+using System.Runtime.InteropServices;
+
+const int SPI_GETSCREENSAVERRUNNING = 114;
+
+[DllImport(&amp;quot;user32.dll&amp;quot;, CharSet = CharSet.Auto)]
+private static extern bool SystemParametersInfo(int uAction, int uParam, ref bool lpvParam, int flags);
+
+// Retorna TRUE se estiver executando
+public static bool GetScreenSaverRunning()
+{
+    bool isRunning = false;
+    SystemParametersInfo(SPI_GETSCREENSAVERRUNNING, 0, ref isRunning, 0);
+    return isRunning;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Assim, pode-se criar uma thread para monitorar o screensaver. Talvez não seja a solução ideal, mas por enquanto está funcionando.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term=".net"></category><category term="windows"></category><category term="c#"></category><category term="csharp"></category></entry><entry><title>Hello World</title><link href="http://rafael.barrelo.com.br/blog/hello-world.html" rel="alternate"></link><updated>2013-12-20T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2013-12-20:blog/hello-world.html</id><summary type="html">&lt;p&gt;Como todo programador que aprende uma nova linguagem com o famoso “Hello World”, aqui não poderia ser diferente…&lt;/p&gt;
+&lt;p&gt;Vou usar esse blog pra “guardar” algumas dicas de desenvolvimento. Não pretendo ter tutorias complexos nem frequência fixa definida. Vou postar conforme achar necessário, sem compromisso algum.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="hello"></category><category term="world"></category></entry></feed>

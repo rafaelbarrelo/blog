@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>rafaelbarrelo.blog</title><link href="http://rafael.barrelo.com.br/blog/" rel="alternate"></link><link href="http://rafael.barrelo.com.br/blog/feeds/android.atom.xml" rel="self"></link><id>http://rafael.barrelo.com.br/blog/</id><updated>2014-02-11T00:00:00-02:00</updated><entry><title>Criar link do Android SDK (Eclipse – Android Studio)</title><link href="http://rafael.barrelo.com.br/blog/link-simbolico-android.html" rel="alternate"></link><updated>2014-02-11T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-02-11:blog/link-simbolico-android.html</id><summary type="html">&lt;p&gt;Crie um link simbólico entre o diretório do SDK do Android do Eclipse e o diretório do Android Studio.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /Applications/Android Studio.app/
+&lt;span class="nv"&gt;$ &lt;/span&gt;ln -s /Users/&lt;span class="o"&gt;{&lt;/span&gt;usuario&lt;span class="o"&gt;}&lt;/span&gt;/Dev/Android/SDK sdk
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Simples assim =)&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="android"></category><category term="eclipse"></category><category term="link"></category><category term="mac"></category><category term="osx"></category><category term="eclipse"></category></entry></feed>

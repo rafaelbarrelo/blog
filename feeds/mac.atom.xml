@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>rafaelbarrelo.blog</title><link href="http://rafael.barrelo.com.br/blog/" rel="alternate"></link><link href="http://rafael.barrelo.com.br/blog/feeds/mac.atom.xml" rel="self"></link><id>http://rafael.barrelo.com.br/blog/</id><updated>2014-02-09T00:00:00-02:00</updated><entry><title>Exibir/ocultar arquivos ocultos no Mac (OSX)</title><link href="http://rafael.barrelo.com.br/blog/exibir-ocultar-osx.html" rel="alternate"></link><updated>2014-02-09T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-02-09:blog/exibir-ocultar-osx.html</id><summary type="html">&lt;p&gt;No terminal use os seguintes comandos:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Exibir:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;defaults write com.apple.finder AppleShowAllFiles -bool &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;KillAll Finder
+ &lt;span class="sb"&gt;```&lt;/span&gt;
+* Ocultar:
+&lt;span class="sb"&gt;```&lt;/span&gt;sh
+&lt;span class="nv"&gt;$ &lt;/span&gt;defaults write com.apple.finder AppleShowAllFiles -bool &lt;span class="nb"&gt;false&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;KillAll Finder
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Simples!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="finder"></category><category term="mac"></category><category term="dica"></category><category term="osx"></category></entry></feed>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>rafaelbarrelo.blog</title><link href="http://rafael.barrelo.com.br/blog/" rel="alternate"></link><link href="http://rafael.barrelo.com.br/blog/feeds/java-eclipse.atom.xml" rel="self"></link><id>http://rafael.barrelo.com.br/blog/</id><updated>2014-05-01T00:00:00-03:00</updated><entry><title>Eclipse error: HttpServlet was not found</title><link href="http://rafael.barrelo.com.br/blog/httpservlet-was-not-found.html" rel="alternate"></link><updated>2014-05-01T00:00:00-03:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-05-01:blog/httpservlet-was-not-found.html</id><summary type="html">&lt;p&gt;Criei um projeto Maven no Eclipse e logo de cara recebi o erro no JSP:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The superclass “javax.servlet.http.HttpServlet” was not found on the Java Build Path&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Em uma busca rápida no Google, achei a solução no StackOverflow:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Click com o botão direito no projeto&lt;/li&gt;
+&lt;li&gt;Selecione: Build Path &amp;gt; Configure Build Path..&lt;/li&gt;
+&lt;li&gt;Selecione a aba Libraries&lt;/li&gt;
+&lt;li&gt;Click em Add Library.. &amp;gt; Server Runtime &amp;gt; Apache Tomcat &amp;gt; Finish.&lt;/li&gt;
+&lt;li&gt;Click em OK e pronto!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;No meu caso, esses passos resolveram a questão da dependência que faltava. Mas caso não resolva, existem mais 2 opções que podem ser encontrada aqui: http://stackoverflow.com/questions/22756153/httpservlet-was-not-found&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="build path"></category><category term="eclipse"></category><category term="http"></category><category term="java"></category><category term="jsp"></category><category term="maven"></category><category term="servlet"></category><category term="tomcat"></category></entry></feed>

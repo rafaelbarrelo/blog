@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>rafaelbarrelo.blog</title><link href="http://rafael.barrelo.com.br/blog/" rel="alternate"></link><link href="http://rafael.barrelo.com.br/blog/feeds/eclipse.atom.xml" rel="self"></link><id>http://rafael.barrelo.com.br/blog/</id><updated>2014-02-05T00:00:00-02:00</updated><entry><title>Como abrir mais de uma instância do Eclipse (OSX) ?</title><link href="http://rafael.barrelo.com.br/blog/eclipse-multiplas-instancias.html" rel="alternate"></link><updated>2014-02-05T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-02-05:blog/eclipse-multiplas-instancias.html</id><summary type="html">&lt;p&gt;Quando eu preciso trabalhar com mais de um workspace no Eclipse, é interessante conseguir abrir mais de uma instância dele. No Mac OSX é bem fácil…&lt;/p&gt;
+&lt;p&gt;Basta fazer o seguinte…&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Click no menu Help &amp;gt; Eclipse Marketplace&lt;/li&gt;
+&lt;li&gt;Pesquise por “OS X Eclipse laucher utility”&lt;/li&gt;
+&lt;li&gt;Instale o plugin&lt;/li&gt;
+&lt;li&gt;Reinicie o Eclipse&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Pronto… agora basta ir em &lt;strong&gt;File &amp;gt; Open Workspace&lt;/strong&gt; para poder abrir mais de uma instância! =)&lt;/p&gt;
+&lt;p&gt;E no &lt;strong&gt;“ALT+TAB”&lt;/strong&gt; ele mostra um label vermelho com o nome do Workspace.&lt;/p&gt;
+&lt;p&gt;Eu vi aqui: http://ananthchellathurai.blogspot.com.br/2013/08/how-to-open-multiple-eclipse-on-mac.html&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="eclipse"></category><category term="java"></category><category term="osx"></category><category term="mac"></category><category term="dica"></category><category term="plugin"></category></entry></feed>

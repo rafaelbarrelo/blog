@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>rafaelbarrelo.blog</title><link href="http://rafael.barrelo.com.br/blog/" rel="alternate"></link><link href="http://rafael.barrelo.com.br/blog/feeds/vpn.atom.xml" rel="self"></link><id>http://rafael.barrelo.com.br/blog/</id><updated>2014-06-14T00:00:00-03:00</updated><entry><title>Automatizando conexão com VPN no MAC OSX</title><link href="http://rafael.barrelo.com.br/blog/vpn-mac-osx.html" rel="alternate"></link><updated>2014-06-14T00:00:00-03:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-06-14:blog/vpn-mac-osx.html</id><summary type="html">&lt;p&gt;Primeiro, é preciso configurar a VPN no Mac pelo painel de configurações (não vou entrar nesse detalhe aqui, mas é bem tranquilo…). Para o exemplo, vamos supor que o nome da VPN criada é RBARRELO, já configurada com usuario e senha e sem marcar a opção “Send all traffic over VPN connection”, pois vamos criar uma rota para isso.&lt;/p&gt;
+&lt;p&gt;Abra seu editor de texto preferido e coloque o seguinte código:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/osascript&lt;/span&gt;
+
+tell application &lt;span class="s2"&gt;&amp;quot;System Events&amp;quot;&lt;/span&gt;
+    tell current location of network preferences
+        &lt;span class="nb"&gt;set &lt;/span&gt;VPNservice to service &lt;span class="s2"&gt;&amp;quot;RBARRELO&amp;quot;&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; exists VPNservice &lt;span class="k"&gt;then&lt;/span&gt;
+            connect VPNservice
+        end &lt;span class="k"&gt;if&lt;/span&gt;
+        repeat &lt;span class="k"&gt;until&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;connected of current configuration of VPNservice&lt;span class="o"&gt;)&lt;/span&gt;
+            delay 1
+            &lt;span class="s2"&gt;&amp;quot;Aguardando conexão com rede RBARRELO...&amp;quot;&lt;/span&gt;
+        end repeat
+
+        &lt;span class="s2"&gt;&amp;quot;Estamos conectado =)&amp;quot;&lt;/span&gt;
+    end tell
+end tell
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Salve o arquivo com o nome &lt;strong&gt;vpn_connect_script&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Em seguida, crie outro arquivo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/osascript&lt;/span&gt;
+
+tell application &lt;span class="s2"&gt;&amp;quot;System Events&amp;quot;&lt;/span&gt;
+ tell current location of network preferences
+  &lt;span class="nb"&gt;set &lt;/span&gt;VPNservice to service &lt;span class="s2"&gt;&amp;quot;RBARRELO&amp;quot;&lt;/span&gt;
+  &lt;span class="nb"&gt;set &lt;/span&gt;isConnected to connected of current configuration of VPNservice
+  &lt;span class="k"&gt;if&lt;/span&gt; isConnected &lt;span class="k"&gt;then&lt;/span&gt; disconnect VPNservice
+ end tell
+end tell
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Salve-o com o nome &lt;strong&gt;vpn_disconnect_script&lt;/strong&gt; no mesmo diretório do primerio.&lt;/p&gt;
+&lt;p&gt;Agora, abra o terminal e execute o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sudo chmod a+x vpn_connect_script &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo chmod a+x vpn_disconnect_script
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Isso irá dar permissão de execução para os scripts.&lt;/p&gt;
+&lt;p&gt;Pronto, agora se executar &lt;em&gt;.vpn_connect_script&lt;/em&gt;, você irá se conectar à VPN e &lt;em&gt;.vpn_disconnect_script&lt;/em&gt; irá te desconectar.&lt;/p&gt;
+&lt;p&gt;Ok, mas para isso funcionar, você precisaria estar no diretório dos scripts… Vamos melhorar isso?&lt;/p&gt;
+&lt;p&gt;Pelo terminal, entre na raiz do seu usuário com o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; ~/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Veja se existe o arquivo .profile com o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;ls -la
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Se existir, basta abri-lo com o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;open -e .profile
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Caso não exista, abra seu editor preferido e salve um arquivo com o nome .profile (sim, tem um ponto na frente!) no seu diretório raiz. Ou rode o comando:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;touch .profile &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; open -e .profile
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Para criar e abrir o arquivo.&lt;/p&gt;
+&lt;p&gt;Coloque no arquivo o seguinte texto:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;alias vpn_connect=&amp;#39;~/{caminho_do_script}/vpn_connect_script &amp;amp;&amp;amp; sudo route add {IP} {Gateway} {Mask} &amp;amp;&amp;amp; ping -a -c 5 {IP}&amp;#39;
+alias vpn_disconnect=&amp;#39;~/{caminho_do_script}/vpn_disconnect_script&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Troque &lt;em&gt;{caminho_do_script}&lt;/em&gt; pelo diretório onde salvou os scripts, &lt;em&gt;{IP}&lt;/em&gt;, &lt;em&gt;{Gateway}&lt;/em&gt; e &lt;em&gt;{Mask}&lt;/em&gt; pelos dados referente a rota que deseja adicionar.&lt;/p&gt;
+&lt;p&gt;Salve o arquivo e feche o terminal.&lt;/p&gt;
+&lt;p&gt;Abra o terminal novamente e agora basta digitar &lt;strong&gt;vpn_connect&lt;/strong&gt; para conectar e &lt;strong&gt;vpn_disconnect&lt;/strong&gt; para desconectar.&lt;/p&gt;
+&lt;p&gt;Legal, não?!&lt;/p&gt;
+&lt;p&gt;Agradecimentos especiais ao &lt;a href="https://plus.google.com/+EduardoMazolini"&gt;Mazola&lt;/a&gt; do blog http://blog.mazolini.com.br/ pela ajuda nas configurações! =)&lt;/p&gt;
+&lt;p&gt;Abraços&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="automatizar"></category><category term="bash"></category><category term="conexão"></category><category term="dica"></category><category term="mac"></category><category term="osx"></category><category term="vpn"></category></entry></feed>

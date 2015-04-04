@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>rafaelbarrelo.blog</title><link href="http://rafael.barrelo.com.br/blog/" rel="alternate"></link><link href="http://rafael.barrelo.com.br/blog/feeds/semcategoria.atom.xml" rel="self"></link><id>http://rafael.barrelo.com.br/blog/</id><updated>2013-12-20T00:00:00-02:00</updated><entry><title>Hello World</title><link href="http://rafael.barrelo.com.br/blog/hello-world.html" rel="alternate"></link><updated>2013-12-20T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2013-12-20:blog/hello-world.html</id><summary type="html">&lt;p&gt;Como todo programador que aprende uma nova linguagem com o famoso “Hello World”, aqui não poderia ser diferente…&lt;/p&gt;
+&lt;p&gt;Vou usar esse blog pra “guardar” algumas dicas de desenvolvimento. Não pretendo ter tutorias complexos nem frequência fixa definida. Vou postar conforme achar necessário, sem compromisso algum.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term="hello"></category><category term="world"></category></entry></feed>

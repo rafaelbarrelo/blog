@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="">	
+<head>
+	<meta charset="utf-8"/>
+	<title>Erro ao fazer deploy no Google App Engine - rafaelbarrelo.blog</title>	
+	<meta name="author" content="rafaelbarrelo">
+	
+
+	<meta name="description" content="Erro ao fazer deploy no Google App Engine">
+
+
+	<link rel="top" href="#" /><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'></link>
+	<link rel="stylesheet" href="http://rafael.barrelo.com.br/blog/theme/css/main.css" type="text/css" />
+		
+
+    <link href="http://rafael.barrelo.com.br/blog/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="rafaelbarrelo.blog Atom Feed" />
+</head>
+	
+<body>
+
+    <div class="container">
+	  
+	  <header role="banner">
+	    <div class="feeds">
+	        <a href="http://rafael.barrelo.com.br/blog/feeds/all.atom.xml" rel="alternate"><img src="http://rafael.barrelo.com.br/blog/theme/images/icons/feed-32px.png" alt="atom feed"/></a>
+	    </div>
+		<a href="http://rafael.barrelo.com.br/blog" class="title">rafaelbarrelo.blog</a>
+      </header>
+	
+	  <div class="wrapper">
+
+		  <div role="main" class="content">
+	<article class="full">
+			
+		<h1>Erro ao fazer deploy no Google App Engine</h1>
+		
+<div class="metadata">
+  <time datetime="2014-01-21T00:00:00-02:00" pubdate>Tue 21 January 2014</time>
+    <address class="vcard author">
+      by <a class="url fn" href="http://rafael.barrelo.com.br/blog/author/rafaelbarrelo.html">rafaelbarrelo</a>
+    </address>
+  in <a href="http://rafael.barrelo.com.br/blog/category/appengine.html">AppEngine</a>
+<p class="tags">tagged <a href="http://rafael.barrelo.com.br/blog/tag/appengine.html">appengine</a>, <a href="http://rafael.barrelo.com.br/blog/tag/eclipse.html">eclipse</a>, <a href="http://rafael.barrelo.com.br/blog/tag/google.html">google</a>, <a href="http://rafael.barrelo.com.br/blog/tag/java.html">java</a></p></div>		
+		<p>Hoje estava tentando publicar um atualização serviço do aplicativo Mídia Palestrina, mas tive alguns problemas de comunicação com o Google App Engine. Depois de tanto insistir, consegui iniciar o deploy… Porém, chegou em 86% e travou. Fui forçado a parar e recomeçar, tendo que dar um force close no Eclipse.</p>
+<p>Quando tentei novamente o deploy, recebi o erro:</p>
+<blockquote>
+<p>Unable to update app: Error posting to URL:
+https://appengine.google.com/api/appversion/create?app_id=appname&amp;version=1&amp;
+409 Conflict
+Another transaction by user userid is already in progress for app: s~appname, version: 1.
+That user can undo the transaction with “appcfg rollback”.
+See the deployment console for more details
+Unable to update app: Error posting to URL:
+https://appengine.google.com/api/appversion/create?app_id=appname&amp;version=1&amp;
+409 Conflict
+Another transaction by user userid is already in progress for app: s~appname, version: 1.
+That user can undo the transaction with “appcfg rollback”.</p>
+</blockquote>
+<p>A mensagem me pareceu bem clara, como forcei o stop, a transação ficou aberta e precisava fecha-la antes de realizar o novo deploy.</p>
+<p>Pesquisando um pouco na net, achei o seguinte tutorial que funcionou perfeitamente pra mim:</p>
+<ul>
+<li>Abra o console e entre no diretório BIN do App Engine SDK, no meu caso:</li>
+</ul>
+<div class="highlight"><pre>/Applications/Eclipse/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.8.8/appengine-java-sdk-1.8.8/bin
+</pre></div>
+
+
+<ul>
+<li>Rode o comando para torar o appcfg.sh em 'executável':</li>
+</ul>
+<div class="highlight"><pre><span class="nv">$ </span>sudo chmod a+x appcfg.sh
+</pre></div>
+
+
+<ul>
+<li>Identifique o diretório war do seu projeto. No meu caso:
+````
+/Users/rafaelbarrelo/Dev/Eclipse/workspace/MidiaPalestrinaServerV2/war/</li>
+</ul>
+<div class="highlight"><pre>* Rode o comando de roolback
+```sh
+$ ./appcfg.sh rollback /Users/rafaelbarrelo/Dev/Eclipse/workspace/MidiaPalestrinaServerV2/war/
+</pre></div>
+
+
+<p>Ele irá iniciar o processo… Coloque o e-mail e senha!
+Fim, processo concluído e deploy “liberado”!
+Obs: No meu caso, como uso Google Authenticator, tive que criar uma senha de aplicativo quando o script solicitou a senha do e-mail. Apenas criei a senha e depois de finalizado excluí-la.</p>
+<p><em>Referência:</em>
+http://stackoverflow.com/questions/11675632/how-do-i-execute-the-command-appcfg-rollback</p>
+<blockquote>
+<p>Esse post foi publicado originalmente no meu antigo blog em WordPress</p>
+</blockquote>	
+
+	</article>
+
+    <p>
+	<a href="https://twitter.com/share" class="twitter-share-button" data-via="" data-lang="en" data-size="large" data-related="">Tweet</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	</p>
+
+
+		  </div>	
+		  
+		  <div class="sidebar">
+
+	        <nav>
+	          <h2>Categories</h2>
+	          <ul>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/android.html">Android</a></li>
+	              <li class="active"><a href="http://rafael.barrelo.com.br/blog/category/appengine.html">AppEngine</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/devops.html">DevOps</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/eclipse.html">Eclipse</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/java-eclipse.html">Java, Eclipse</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/mac.html">Mac</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/net.html">.Net</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/python.html">Python</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/semcategoria.html">sem.categoria</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/vpn.html">VPN</a></li>
+	          </ul>
+	        </nav>
+
+	          <aside>
+	          <h2>Social</h2>
+			    <ul class="social">
+				  <li><a href="https://twitter.com/rafaelbarrelo">Twitter</a><i></i></li>
+				  <li><a href="https://github.com/rafaelbarrelo">GitHub</a><i></i></li>
+			    </ul>
+			  </aside>
+
+	          <aside>
+	            <h2>Blogroll</h2>
+	            <ul>
+	                <li><a href="http://getpelican.com/">Pelican</a></li>
+	                <li><a href="http://python.org/">Python.org</a></li>
+	                <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+	            </ul>
+	          </aside>
+
+		  </div>
+
+	  </div>
+
+      <footer>
+		<p role="contentinfo">
+		  © 2013 rafaelbarrelo - Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">pelican</a>. Theme <a href="https://github.com/fle/pelican-simplegrey">pelican-simplegrey</a>.
+    	</p>
+
+	  </footer>	
+
+	</div>
+	
+
+</body>
+</html>

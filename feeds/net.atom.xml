@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>rafaelbarrelo.blog</title><link href="http://rafael.barrelo.com.br/blog/" rel="alternate"></link><link href="http://rafael.barrelo.com.br/blog/feeds/net.atom.xml" rel="self"></link><id>http://rafael.barrelo.com.br/blog/</id><updated>2014-01-15T00:00:00-02:00</updated><entry><title>Como identificar LOCK e UNLOCK do Windows em .NET? E o Screen Saver?</title><link href="http://rafael.barrelo.com.br/blog/lock-unlock-net.html" rel="alternate"></link><updated>2014-01-15T00:00:00-02:00</updated><author><name>rafaelbarrelo</name></author><id>tag:rafael.barrelo.com.br,2014-01-15:blog/lock-unlock-net.html</id><summary type="html">&lt;p&gt;Para identificar os comandos de LOCK e UNLOCK do Windows em .NET basta implementar o seguinte:&lt;/p&gt;
+&lt;p&gt;```c#
+//Habilita controle do bloqueio de tela
+Microsoft.Win32.SystemEvents.SessionSwitch +=
+  new Microsoft.Win32.SessionSwitchEventHandler(SystemEvents_SessionSwitch);&lt;/p&gt;
+&lt;p&gt;//Trata os eventos
+void SystemEvents_SessionSwitch(object sender, Microsoft.Win32.SessionSwitchEventArgs e)
+{
+    if (e.Reason == SessionSwitchReason.SessionLock){
+        //Bloqueou estação
+    }
+    else if (e.Reason == SessionSwitchReason.SessionUnlock){
+        //Desbloqueou estação
+    }
+}&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;Mas… Se entra o ScreenSaver, ele não bloqueia a tela imediatamente. O comando de bloquei só ocorre quando o ScreenSaver fecha. Assim, podemos “saber” se o ScreenSaver está ativado e tomar uma ação:
+
+```c#
+using System.Runtime.InteropServices;
+
+const int SPI_GETSCREENSAVERRUNNING = 114;
+
+[DllImport(&amp;quot;user32.dll&amp;quot;, CharSet = CharSet.Auto)]
+private static extern bool SystemParametersInfo(int uAction, int uParam, ref bool lpvParam, int flags);
+
+// Retorna TRUE se estiver executando
+public static bool GetScreenSaverRunning()
+{
+    bool isRunning = false;
+    SystemParametersInfo(SPI_GETSCREENSAVERRUNNING, 0, ref isRunning, 0);
+    return isRunning;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Assim, pode-se criar uma thread para monitorar o screensaver. Talvez não seja a solução ideal, mas por enquanto está funcionando.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Esse post foi publicado originalmente no meu antigo blog em WordPress&lt;/p&gt;
+&lt;/blockquote&gt;</summary><category term=".net"></category><category term="windows"></category><category term="c#"></category><category term="csharp"></category></entry></feed>

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="">	
+<head>
+	<meta charset="utf-8"/>
+	<title>Automatizando conexão com VPN no MAC OSX - rafaelbarrelo.blog</title>	
+	<meta name="author" content="rafaelbarrelo">
+	
+
+	<meta name="description" content="Automatizando conexão com VPN no MAC OSX">
+
+
+	<link rel="top" href="#" /><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'></link>
+	<link rel="stylesheet" href="http://rafael.barrelo.com.br/blog/theme/css/main.css" type="text/css" />
+		
+
+    <link href="http://rafael.barrelo.com.br/blog/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="rafaelbarrelo.blog Atom Feed" />
+</head>
+	
+<body>
+
+    <div class="container">
+	  
+	  <header role="banner">
+	    <div class="feeds">
+	        <a href="http://rafael.barrelo.com.br/blog/feeds/all.atom.xml" rel="alternate"><img src="http://rafael.barrelo.com.br/blog/theme/images/icons/feed-32px.png" alt="atom feed"/></a>
+	    </div>
+		<a href="http://rafael.barrelo.com.br/blog" class="title">rafaelbarrelo.blog</a>
+      </header>
+	
+	  <div class="wrapper">
+
+		  <div role="main" class="content">
+	<article class="full">
+			
+		<h1>Automatizando conexão com VPN no MAC OSX</h1>
+		
+<div class="metadata">
+  <time datetime="2014-06-14T00:00:00-03:00" pubdate>Sat 14 June 2014</time>
+    <address class="vcard author">
+      by <a class="url fn" href="http://rafael.barrelo.com.br/blog/author/rafaelbarrelo.html">rafaelbarrelo</a>
+    </address>
+  in <a href="http://rafael.barrelo.com.br/blog/category/vpn.html">VPN</a>
+<p class="tags">tagged <a href="http://rafael.barrelo.com.br/blog/tag/automatizar.html">automatizar</a>, <a href="http://rafael.barrelo.com.br/blog/tag/bash.html">bash</a>, <a href="http://rafael.barrelo.com.br/blog/tag/conexao.html">conexão</a>, <a href="http://rafael.barrelo.com.br/blog/tag/dica.html">dica</a>, <a href="http://rafael.barrelo.com.br/blog/tag/mac.html">mac</a>, <a href="http://rafael.barrelo.com.br/blog/tag/osx.html">osx</a>, <a href="http://rafael.barrelo.com.br/blog/tag/vpn.html">vpn</a></p></div>		
+		<p>Primeiro, é preciso configurar a VPN no Mac pelo painel de configurações (não vou entrar nesse detalhe aqui, mas é bem tranquilo…). Para o exemplo, vamos supor que o nome da VPN criada é RBARRELO, já configurada com usuario e senha e sem marcar a opção “Send all traffic over VPN connection”, pois vamos criar uma rota para isso.</p>
+<p>Abra seu editor de texto preferido e coloque o seguinte código:</p>
+<div class="highlight"><pre><span class="c">#!/usr/bin/osascript</span>
+
+tell application <span class="s2">&quot;System Events&quot;</span>
+    tell current location of network preferences
+        <span class="nb">set </span>VPNservice to service <span class="s2">&quot;RBARRELO&quot;</span>
+        <span class="k">if</span> exists VPNservice <span class="k">then</span>
+            connect VPNservice
+        end <span class="k">if</span>
+        repeat <span class="k">until</span> <span class="o">(</span>connected of current configuration of VPNservice<span class="o">)</span>
+            delay 1
+            <span class="s2">&quot;Aguardando conexão com rede RBARRELO...&quot;</span>
+        end repeat
+
+        <span class="s2">&quot;Estamos conectado =)&quot;</span>
+    end tell
+end tell
+</pre></div>
+
+
+<p>Salve o arquivo com o nome <strong>vpn_connect_script</strong></p>
+<p>Em seguida, crie outro arquivo:</p>
+<div class="highlight"><pre><span class="c">#!/usr/bin/osascript</span>
+
+tell application <span class="s2">&quot;System Events&quot;</span>
+ tell current location of network preferences
+  <span class="nb">set </span>VPNservice to service <span class="s2">&quot;RBARRELO&quot;</span>
+  <span class="nb">set </span>isConnected to connected of current configuration of VPNservice
+  <span class="k">if</span> isConnected <span class="k">then</span> disconnect VPNservice
+ end tell
+end tell
+</pre></div>
+
+
+<p>Salve-o com o nome <strong>vpn_disconnect_script</strong> no mesmo diretório do primerio.</p>
+<p>Agora, abra o terminal e execute o comando:</p>
+<div class="highlight"><pre>sudo chmod a+x vpn_connect_script <span class="o">&amp;&amp;</span> sudo chmod a+x vpn_disconnect_script
+</pre></div>
+
+
+<p>Isso irá dar permissão de execução para os scripts.</p>
+<p>Pronto, agora se executar <em>.vpn_connect_script</em>, você irá se conectar à VPN e <em>.vpn_disconnect_script</em> irá te desconectar.</p>
+<p>Ok, mas para isso funcionar, você precisaria estar no diretório dos scripts… Vamos melhorar isso?</p>
+<p>Pelo terminal, entre na raiz do seu usuário com o comando:</p>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> ~/
+</pre></div>
+
+
+<p>Veja se existe o arquivo .profile com o comando:</p>
+<div class="highlight"><pre><span class="nv">$ </span>ls -la
+</pre></div>
+
+
+<p>Se existir, basta abri-lo com o comando:</p>
+<div class="highlight"><pre><span class="nv">$ </span>open -e .profile
+</pre></div>
+
+
+<p>Caso não exista, abra seu editor preferido e salve um arquivo com o nome .profile (sim, tem um ponto na frente!) no seu diretório raiz. Ou rode o comando:</p>
+<div class="highlight"><pre><span class="nv">$ </span>touch .profile <span class="o">&amp;&amp;</span> open -e .profile
+</pre></div>
+
+
+<p>Para criar e abrir o arquivo.</p>
+<p>Coloque no arquivo o seguinte texto:</p>
+<div class="highlight"><pre>alias vpn_connect=&#39;~/{caminho_do_script}/vpn_connect_script &amp;&amp; sudo route add {IP} {Gateway} {Mask} &amp;&amp; ping -a -c 5 {IP}&#39;
+alias vpn_disconnect=&#39;~/{caminho_do_script}/vpn_disconnect_script&#39;
+</pre></div>
+
+
+<p>Troque <em>{caminho_do_script}</em> pelo diretório onde salvou os scripts, <em>{IP}</em>, <em>{Gateway}</em> e <em>{Mask}</em> pelos dados referente a rota que deseja adicionar.</p>
+<p>Salve o arquivo e feche o terminal.</p>
+<p>Abra o terminal novamente e agora basta digitar <strong>vpn_connect</strong> para conectar e <strong>vpn_disconnect</strong> para desconectar.</p>
+<p>Legal, não?!</p>
+<p>Agradecimentos especiais ao <a href="https://plus.google.com/+EduardoMazolini">Mazola</a> do blog http://blog.mazolini.com.br/ pela ajuda nas configurações! =)</p>
+<p>Abraços</p>
+<blockquote>
+<p>Esse post foi publicado originalmente no meu antigo blog em WordPress</p>
+</blockquote>	
+
+	</article>
+
+    <p>
+	<a href="https://twitter.com/share" class="twitter-share-button" data-via="" data-lang="en" data-size="large" data-related="">Tweet</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	</p>
+
+
+		  </div>	
+		  
+		  <div class="sidebar">
+
+	        <nav>
+	          <h2>Categories</h2>
+	          <ul>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/android.html">Android</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/appengine.html">AppEngine</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/devops.html">DevOps</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/eclipse.html">Eclipse</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/java-eclipse.html">Java, Eclipse</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/mac.html">Mac</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/net.html">.Net</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/python.html">Python</a></li>
+	              <li ><a href="http://rafael.barrelo.com.br/blog/category/semcategoria.html">sem.categoria</a></li>
+	              <li class="active"><a href="http://rafael.barrelo.com.br/blog/category/vpn.html">VPN</a></li>
+	          </ul>
+	        </nav>
+
+	          <aside>
+	          <h2>Social</h2>
+			    <ul class="social">
+				  <li><a href="https://twitter.com/rafaelbarrelo">Twitter</a><i></i></li>
+				  <li><a href="https://github.com/rafaelbarrelo">GitHub</a><i></i></li>
+			    </ul>
+			  </aside>
+
+	          <aside>
+	            <h2>Blogroll</h2>
+	            <ul>
+	                <li><a href="http://getpelican.com/">Pelican</a></li>
+	                <li><a href="http://python.org/">Python.org</a></li>
+	                <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+	            </ul>
+	          </aside>
+
+		  </div>
+
+	  </div>
+
+      <footer>
+		<p role="contentinfo">
+		  © 2013 rafaelbarrelo - Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">pelican</a>. Theme <a href="https://github.com/fle/pelican-simplegrey">pelican-simplegrey</a>.
+    	</p>
+
+	  </footer>	
+
+	</div>
+	
+
+</body>
+</html>
